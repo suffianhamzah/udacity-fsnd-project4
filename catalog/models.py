@@ -1,8 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-
-from .catalog import app
-
-db = SQLAlchemy(app)
+from . import db
 
 # Instead of Base, use db.Model
 
@@ -11,26 +7,33 @@ db = SQLAlchemy(app)
 # flask-sqlalchemy would set auto_increment to true (WOW!)
 
 
+class Category(db.Model):
+    __tablename__ = 'category'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<Category {0}>'.format(self.name)
+
+
 class Item(db.Model):
     __tablename__ = 'item'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False, index=True) # index makes queries more efficient
     description = db.Column(db.String)
-    category_id = db.Column(db.Integer, db.ForeignKey('catalog.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
 
+    category = db.relationship('Category', backref='items')
 
-class Catalog(db.Model):
-    __tablename__ = 'catalog'
+    def __init__(self, name, description, category):
+        self.name = name
+        self.description = description
+        self.category = category
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-
-    # One to many relationship with items
-    items = db.relationship('item', backref='person')
-
-
-class User(db.Model):
-    __tablename__ = 'user'
-    pass
-
+    def __repr__(self):
+        return '<Item {0}, category {1}>'.format(self.name, self.category)
