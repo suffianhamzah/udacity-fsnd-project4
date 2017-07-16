@@ -42,9 +42,9 @@ def destroydb():
     print('dropped db tables')
 
 
-manager.add_command("shell", Shell)
-manager.add_command("runserver", Server)
+manager.add_command('shell', server)
+manager.add_command('runserver', server)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     manager.run()
