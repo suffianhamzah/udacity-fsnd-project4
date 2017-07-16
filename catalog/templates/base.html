@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <title>{% block title %}{% endblock %} - Patalog</title>
+    {% endblock%}
+</head>
+<body>
+    <div>BelajarKod:
+        <a href="/to/be/hel">Laman Utama</a>
+        | <a href="/none/">Panduan</a>
+        | <a href="/none/">Mulakan Panduan Baru</a>
+    </div>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+        {% block footer %}
+        &copy; Copyright 2017 by
+        {% endblock %}
+    </div>
+</body>
+</html>

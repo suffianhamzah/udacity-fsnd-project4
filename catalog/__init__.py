@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, render_template
-from .models import db
+from .models import db, Item, Category
 
 # base_dir = os.path.abspath()
 app = Flask(__name__)
