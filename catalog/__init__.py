@@ -1,14 +1,16 @@
 import os
 
 from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
+from .models import db
 
 # base_dir = os.path.abspath()
 app = Flask(__name__)
 
 # app configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-db = SQLAlchemy(app)
+app.config.from_pyfile('config.py')
+
+# db initialization
+db.init_app(app)
 
 
 @app.route('/')
@@ -17,12 +19,11 @@ def index():
 
 @app.route('/categories')
 def show_categories():
-
+    pass
 
 @app.route('/categories/<int:category_id>')
 def show_category(category_id):
     pass
 
 if __name__ == '__main__':
-    app.debug = True
     app.run(host='0.0.0.0', port=9000)

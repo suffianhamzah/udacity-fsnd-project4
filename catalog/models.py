@@ -1,4 +1,4 @@
-from . import db
+from flask_sqlalchemy import SQLAlchemy
 
 # Instead of Base, use db.Model
 
@@ -6,6 +6,8 @@ from . import db
 
 # flask-sqlalchemy would set auto_increment to true (WOW!)
 
+# dbpattern initialization from https://stackoverflow.com/questions/9692962/flask-sqlalchemy-import-context-issue/9695045#9695045
+db = SQLAlchemy()
 
 class Category(db.Model):
     __tablename__ = 'category'
