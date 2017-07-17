@@ -21,7 +21,8 @@ def index():
 
 @app.route('/categories')
 def show_categories():
-    pass
+    categories = Category.query.all()
+    return render_template('category.html', categories=categories)
 
 
 @app.route('/categories/<int:category_id>')
