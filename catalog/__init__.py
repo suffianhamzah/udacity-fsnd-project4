@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from .models import db, Item, Category
 
 # base_dir = os.path.abspath()
@@ -31,9 +31,12 @@ def show_category(category_id):
     return category.items
 
 
-@app.route('/items/add', methods=['GET','POST'])
-def add_item():
-    pass
+@app.route('/items/new', methods=['GET','POST'])
+def new_item():
+    if request.method = 'POST':
+
+    else:
+        return render_tempplate('newitem.html')
 
 if __name__ == '__main__':
     app.run()

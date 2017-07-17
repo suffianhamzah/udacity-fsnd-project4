@@ -1,0 +1,6 @@
+{% extends 'base.html'%}
+{% block content %}
+<form action='{{url_for(new_item)}}' method='post'>
+    <input name='name'>
+</form>
+{% endblock%}
