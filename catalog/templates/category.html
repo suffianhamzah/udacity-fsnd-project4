@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Categories</h2>
-<a href='{{ url_for("show_categories")}}'>asdads</a>
-{% if categories %}
-{% for category in categories %}
+<h2>All items {{ category.name }}</h2>
+{% if category.items %}
+{% for item in category.items %}
 <ul>
-    <li>{{ category }}</li>
+    <li>{{ item.name }}</li>
 </ul>
 {% endfor %}
 {% else %}
+<p>Oh no! Looks like there's no items for this category!</p>
+<p>Would you like to create one?</p>
+<a href='{{url_for("new_item")}}'><button>Add item</button></a>
 {% endif %}
 {% endblock %}

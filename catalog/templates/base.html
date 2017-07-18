@@ -11,6 +11,15 @@
         | <a href='/none/'>Panduan</a>
         | <a href='/none/'>Mulakan Panduan Baru</a>
     </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+  {% endif %}
+{% endwith %}
     <div id='content'>{% block content %}{% endblock %}</div>
     <div id='footer'>
         {% block footer %}

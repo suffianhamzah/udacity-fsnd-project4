@@ -24,13 +24,13 @@ def index():
 @app.route('/categories')
 def show_categories():
     categories = Category.query.all()
-    return render_template('category.html', categories=categories)
+    return render_template('categories.html', categories=categories)
 
 
 @app.route('/categories/<int:category_id>')
 def show_category(category_id):
     category = Category.query.filter_by(id=category_id).first_or_404()
-    return category.items
+    return render_template('category.html', category=category)
 
 
 @app.route('/items/new', methods=['GET','POST'])
