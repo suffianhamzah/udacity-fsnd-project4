@@ -1,10 +1,13 @@
-from flask_wtf import Form
-from wtforms import StringField
-from wtforms.validators import DataRequired, Email
+from flask_wtf import FlaskForm
+from wtforms import StringField, SelectField, TextAreaField
+from wtforms.validators import DataRequired, Optional, Length
 
-class itemForm(Form):
-    # TO DO:
-    # Select category dynamically from database - load all form database and populate,m
-    name = StringField('name', validators=[DataRequired()])
-    description = StringField('description')
-    category
+from .models import Category
+
+
+class itemForm(FlaskForm):
+    """Form for creating and editing items"""
+    name = StringField('Name', validators=[DataRequired(), Length(max=250)])
+    description = TextAreaField('Description', validators=[Optional()])
+
+    category = SelectField('Category', coerce=int)

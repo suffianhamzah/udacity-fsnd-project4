@@ -1,6 +1,13 @@
 {% extends 'base.html'%}
 {% block content %}
-<form action='{{url_for(new_item)}}' method='post'>
-    <input name='name'>
+<form method="POST" action="/items/new">
+    {{ form.csrf_token }}
+    {{ form.name.label }} {{ form.name(size=80) }}
+    {% if form.name.errors %}
+        <ul class="errors">{% for error in form.name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+    {{ form.description.label }} {{ form.description(column=80, row=50)}}
+    {{ form.category.label }} {{ form.category }}
+    <input type="submit" value="Create Item">
 </form>
 {% endblock%}
