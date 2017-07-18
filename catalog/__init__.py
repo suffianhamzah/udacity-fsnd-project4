@@ -29,11 +29,17 @@ def show_categories():
 
 @app.route('/categories/<int:category_id>')
 def show_category(category_id):
-    category = Category.query.filter_by(id=category_id).first_or_404()
+    category = Category.query.get(category_id)
     return render_template('category.html', category=category)
 
 
-@app.route('/items/new', methods=['GET','POST'])
+@app.route('/item/<int:item_id>')
+def show_item(item_id):
+    item = Item.query.filter_by(id=item_id).first_or_404()
+    return render_template('item.html', item=item)
+
+
+@app.route('/item/new', methods=['GET', 'POST'])
 def new_item():
     form = itemForm()
     category_choices = [(category.id, category.name)
@@ -49,6 +55,42 @@ def new_item():
         return redirect(url_for('index'))
     else:
         return render_template('newitem.html', form=form)
+
+
+@app.route('/item/edit/<int:item_id>', methods=['GET', 'POST'])
+def edit_item(item_id):
+    """Edits an existing item's fields
+
+    With reference from: https://goonan.io/flask-wtf-tricks/
+
+    """
+    item = Item.query.get_or_404(item_id)
+    form = itemForm(obj=item)  # Prepulate form
+    category_choices = [(category.id, category.name)
+                        for category in Category.query.all()]
+    form.category.choices = category_choices
+
+    if form.validate_on_submit():
+        item.name = form.name.data
+        item.description = form.description.data
+        category = Category.query.get(form.category.data)
+        item.category = category
+        db.session.add(item)
+        db.session.commit()
+        flash('{} has been edited'.format(item.name))
+        return redirect(url_for('show_item', item_id=item.id))
+
+    form.name.data = item.name
+    form.description.data = item.description
+    form.category.data = item.category.id
+
+    return render_template('edititem.html', form=form, item=item)
+
+
+@app.route('/item/delete/<int:item_id>')
+def delete_item(item_id):
+    pass
+
 
 if __name__ == '__main__':
     app.run()

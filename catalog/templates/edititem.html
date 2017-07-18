@@ -1,6 +1,7 @@
 {% extends 'base.html'%}
 {% block content %}
-<form method='POST' action='{{url_for("new_item")}}'>
+<h1></h1>
+<form method='POST' action='{{url_for("edit_item", item_id = item.id )}}'>
     {{ form.csrf_token }}
     {{ form.name.label }} {{ form.name(size=80) }}
     {% if form.name.errors %}
@@ -8,6 +9,6 @@
     {% endif %}
     {{ form.description.label }} {{ form.description(column=80, row=50)}}
     {{ form.category.label }} {{ form.category }}
-    <input type='submit' value='Create Item'>
+    <input type='submit' value='Submit'>
 </form>
 {% endblock%}
