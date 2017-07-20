@@ -52,7 +52,7 @@ def new_item():
         db.session.add(item)
         db.session.commit()
         flash('{0} has been created!'.format(item.name))
-        return redirect(url_for('index'))
+        return redirect(url_for('show_item', item_id=item.id))
     else:
         return render_template('newitem.html', form=form)
 
@@ -87,9 +87,15 @@ def edit_item(item_id):
     return render_template('edititem.html', form=form, item=item)
 
 
-@app.route('/item/delete/<int:item_id>')
+@app.route('/item/delete/<int:item_id>', methods=['GET', 'POST'])
 def delete_item(item_id):
-    pass
+    item = Item.query.get_or_404(item_id)
+    if request.method == 'POST':
+        db.session.delete(item)
+        db.session.commit()
+        flash('{} has been deleted :('.format(item.name))
+        return redirect(url_for('index'))
+    return render_template('deleteitem.html', item = item)
 
 
 if __name__ == '__main__':

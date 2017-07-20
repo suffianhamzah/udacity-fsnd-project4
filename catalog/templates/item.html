@@ -1,7 +1,8 @@
 {% extends 'base.html'%}
 
 {% block content%}
-<h1>{{ item.name }}<h1>
-<a href='{{url_for("edit_item", item_id=item.id)}}'>Edit</a>
+<h1>{{ item.name }}</h1>
+<p>Description: {{ item.description }}</p>
+<a href='{{url_for("edit_item", item_id=item.id)}}'>Edit</a> |
 <a href='{{url_for("delete_item", item_id=item.id)}}'>Delete</a>
 {% endblock%}

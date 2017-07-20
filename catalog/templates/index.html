@@ -10,7 +10,7 @@
 <ul>
 {% for item in items: %}
     <li>
-        <p> {{ item.name }}, <a href='{{ url_for("show_category", category_id=item.category.id)}}'>{{ item.category.name }}</a></p>
+        <p> {{ item.category.name }}, <a href='{{ url_for("show_item", item_id=item.id)}}'>{{ item.name }}</a></p>
     </li>
 {% endfor %}
 </ul>
