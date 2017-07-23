@@ -19,7 +19,7 @@ server = Server(host="0.0.0.0", port=9000)
 def createdb():
     db.create_all()
     """ Creates some objects in the db
-
+    """
     Soccer = Category(name='Soccer')
     Baseball = Category(name='Baseball')
     boot = Item(name='Boots', description='Boots worn during playing',
@@ -32,7 +32,7 @@ def createdb():
     db.session.add(bat)
     db.session.add(ball)
     db.session.commit()
-    """
+
     print('created db instance!')
 
 

@@ -4,9 +4,12 @@ Heavily inspired by https://blog.miguelgrinberg.com/post/oauth-authentication-wi
 Using Requests oauth
 """
 
-from flask import current_app, session, url_for, request
+import json
+import requests
+
+from flask import current_app, session, url_for, request, make_response
 from requests_oauthlib import OAuth2Session
-from oauthlib.oauth2 import InvalidClientIdError
+
 
 
 class OauthSignIn(object):
@@ -59,7 +62,7 @@ class OauthSignIn(object):
 class GoogleSignIn(OauthSignIn):
     def __init__(self):
         """Init and overriding the provider_name using super"""
-        super(GoogleSignIn, self).__init__('google')
+        super().__init__('google')
         self.auth_base_url = 'https://accounts.google.com/o/oauth2/v2/auth'
         self.token_url = 'https://www.googleapis.com/oauth2/v4/token'
         self.base_url = 'https://www.googleapis.com/auth/'
@@ -68,6 +71,7 @@ class GoogleSignIn(OauthSignIn):
         self.auth_session = OAuth2Session(self.client_id,
                                           scope=self.scope,
                                           redirect_uri=self.get_callback_url())
+
     def authorize(self):
         """Returns a STATE token for preventing CSRF"""
         # auth_session =
@@ -78,28 +82,25 @@ class GoogleSignIn(OauthSignIn):
         session['oauth_state'] = state
         return authorization_url
 
-    def callback(self, state):
+    def callback(self):
         """Retrieves access token from provider
 
 
         """
-        print(state)
-        print(session)
-        """
-        auth_session = OAuth2Session(self.client_id,
-                                     state=state,
-                                     redirect_uri=self.get_callback_url())
-        """
-        try:
-            access_token = (self.auth_session.fetch_token(
-                            self.token_url,
-                            client_secret=self.client_secret,
-                            authorization_response=request.url))
-        except Exception as e:
-            print(e)
-            return 'broken'
+        access_token = (self.auth_session.fetch_token(
+                        self.token_url,
+                        client_secret=self.client_secret,
+                        authorization_response=request.url))
         session['auth_token'] = access_token
 
         # fetches the info
-        r = self.auth_session.get('https://www.googleapis.com/oauth2/v1/userinfo')
-        return r.content
+        resp = self.auth_session.get('https://www.googleapis.com/oauth2/v1/userinfo')
+        userinfo = resp.json()
+        print(userinfo)
+        return userinfo
+        #return 'google$' + resp_dict['id'], resp_dict['name'] , resp_dict['email']
+
+
+#class FacebookSignIn(OauthSignIn):
+ #   def __init__(self):
+ #       super().__init__('facebook')

@@ -1,5 +1,6 @@
-from flask import Flask, render_template, url_for, request, flash, redirect, session, request
-from flask_login import LoginManager
+from flask import (Flask, render_template, url_for, request,
+                   flash, redirect, session, request, make_response)
+from flask_login import LoginManager, login_user, logout_user, current_user
 from flask.json import jsonify
 from .forms import itemForm
 from .models import db, Item, Category, User
@@ -18,11 +19,12 @@ db.init_app(app)
 # Login Manager from Flask Login
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_managerlogin_view = 'login'
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    return User.query.get(int(user_id))
 
 
 @app.route('/')
@@ -122,8 +124,12 @@ def login():
     # Extras! Write tests, if possible for some of the things
     # Extras! Implement different configs for DEV vs PROD
     """
-    if session.get('token') is not None:
-        redirect(url_for('index'))
+    print(session.get('auth_token') is None)
+    print(session.get('auth_token') is not None)
+    print(session.get('auth_token'))
+    if not current_user.is_anonymous:
+        flash('You are logged in already.')
+        return redirect(url_for('index'))
 
     return render_template('login.html')
 
@@ -142,21 +148,43 @@ def callback(provider):
     if 'error' in request.args:
         return request.args.get('error')
     print('test1')
-    print(session['oauth_state'])
+
     no_code = 'code' not in request.args
-    not_state = request.args.get('state') != session['oauth_state']
+    not_state = request.args.get('state') != session.get('oauth_state')
     if no_code and not_state:
         return 'Invalid State and no auth code!'
     print(provider)
     oauth = OauthSignIn.get_provider(provider)
     print(oauth)
     try:
-        stuff = oauth.callback(session['oauth_state'])
+        stuff = oauth.callback()
     except Exception as e:
-        flash(e)
-        return e
+        print(e)
+        return make_response(jsonify(error=e), 401)
+    #login_user(user, True)
+    user = User.query.filter_by(unique_id=stuff['id']).first()
+    if not user:
+        user = User(unique_id=stuff['id'],
+                    name=stuff['name'],
+                    email=stuff['email'],
+                    picture=stuff['picture'])
+        db.session.add(user)
+        db.session.commit()
+    login_user(user, True)
+    flash('You Are logged in')
+    return redirect(url_for('index'))
 
-    return stuff
+
+@app.route('/logout/<provider>')
+def logout(provider):
+    token = session.get('auth_token')
+    if token is None:
+        response = make_response(jsonify(status='User not connected'), 401)
+        return response
+    del session['auth_token']
+    logout_user()
+    flash('Successfully logged out')
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
