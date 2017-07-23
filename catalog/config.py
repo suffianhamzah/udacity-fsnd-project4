@@ -19,7 +19,7 @@ class Config(object):
 
 class DevConfig(Config):
     DEBUG = True
-
+    OAUTHLIB_INSECURE_TRANSPORT = os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 config = {
     'default': DevConfig,

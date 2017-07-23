@@ -1,8 +1,10 @@
-from flask import Flask, render_template, url_for, request, flash, redirect, session
+from flask import Flask, render_template, url_for, request, flash, redirect, session, request
+from flask_login import LoginManager
 from flask.json import jsonify
 from .forms import itemForm
 from .models import db, Item, Category, User
 from .config import config
+from .auth import OauthSignIn
 # base_dir = os.path.abspath()
 app = Flask(__name__)
 
@@ -12,6 +14,15 @@ app.config.from_object(config['default'])
 
 # db initialization
 db.init_app(app)
+
+# Login Manager from Flask Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
 
 
 @app.route('/')
@@ -116,9 +127,37 @@ def login():
 
     return render_template('login.html')
 
-@app.route('/authorize/<provider>'):
+
+@app.route('/authorize/<provider>')
 def authorize(provider):
-    oauth =
+    """Instantiates"""
+    print(provider)
+    oauth = OauthSignIn.get_provider(provider)
+    return redirect(oauth.authorize())
+
+
+@app.route('/callback/<provider>')
+def callback(provider):
+    print(request.args)
+    if 'error' in request.args:
+        return request.args.get('error')
+    print('test1')
+    print(session['oauth_state'])
+    no_code = 'code' not in request.args
+    not_state = request.args.get('state') != session['oauth_state']
+    if no_code and not_state:
+        return 'Invalid State and no auth code!'
+    print(provider)
+    oauth = OauthSignIn.get_provider(provider)
+    print(oauth)
+    try:
+        stuff = oauth.callback(session['oauth_state'])
+    except Exception as e:
+        flash(e)
+        return e
+
+    return stuff
+
 
 if __name__ == '__main__':
     app.run()
