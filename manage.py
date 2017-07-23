@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from flask_script import Server, Manager, Shell
-from catalog import app, db, Item, Category
+from catalog import app, db, Item, Category, User
 
 
 def make_shell_context():

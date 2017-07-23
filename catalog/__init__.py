@@ -1,14 +1,14 @@
-import os
-
-from flask import Flask, render_template, url_for, request, flash, redirect
+from flask import Flask, render_template, url_for, request, flash, redirect, session
+from flask.json import jsonify
 from .forms import itemForm
-from .models import db, Item, Category
-
+from .models import db, Item, Category, User
+from .config import config
 # base_dir = os.path.abspath()
 app = Flask(__name__)
 
 # app configuration
-app.config.from_pyfile('config.py')
+app.config.from_object(config['default'])
+# app.config.from_pyfile('config.py')
 
 # db initialization
 db.init_app(app)
@@ -97,6 +97,28 @@ def delete_item(item_id):
         return redirect(url_for('index'))
     return render_template('deleteitem.html', item = item)
 
+############################# AUTH #####################################
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    # TO DO
+    """
+    add login page
+    login endpoint should check if there's a user token available
+    Using https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask/page/0#comments
+    implement User model, should be finished by friday
+    Friday - finish auth, implement auth and make sure everything's working
+    add some style to app
+    # Extras! Write tests, if possible for some of the things
+    # Extras! Implement different configs for DEV vs PROD
+    """
+    if session.get('token') is not None:
+        redirect(url_for('index'))
+
+    return render_template('login.html')
+
+@app.route('/authorize/<provider>'):
+def authorize(provider):
+    oauth =
 
 if __name__ == '__main__':
     app.run()
