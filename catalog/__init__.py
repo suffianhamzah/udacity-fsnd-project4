@@ -1,6 +1,6 @@
 from flask import (Flask, render_template, url_for, request,
                    flash, redirect, session, request, make_response)
-from flask_login import LoginManager, login_user, logout_user, current_user
+from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from flask.json import jsonify
 from .forms import itemForm
 from .models import db, Item, Category, User
@@ -19,7 +19,7 @@ db.init_app(app)
 # Login Manager from Flask Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_managerlogin_view = 'login'
+login_manager.login_view = 'login'
 
 
 @login_manager.user_loader
@@ -53,6 +53,7 @@ def show_item(item_id):
 
 
 @app.route('/item/new', methods=['GET', 'POST'])
+@login_required
 def new_item():
     form = itemForm()
     category_choices = [(category.id, category.name)
@@ -60,8 +61,10 @@ def new_item():
     form.category.choices = category_choices
     print(category_choices)
     if form.validate_on_submit():
-        category = Category.query.get(form.category.data)
-        item = Item(form.name.data, form.description.data, category)
+        item = Item(name=form.name.data,
+                    description=form.description.data,
+                    category_id=form.category.data,
+                    user_id=current_user.get_id())
         db.session.add(item)
         db.session.commit()
         flash('{0} has been created!'.format(item.name))
@@ -86,8 +89,7 @@ def edit_item(item_id):
     if form.validate_on_submit():
         item.name = form.name.data
         item.description = form.description.data
-        category = Category.query.get(form.category.data)
-        item.category = category
+        item.category_id = form.category.data
         db.session.add(item)
         db.session.commit()
         flash('{} has been edited'.format(item.name))
@@ -108,26 +110,14 @@ def delete_item(item_id):
         db.session.commit()
         flash('{} has been deleted :('.format(item.name))
         return redirect(url_for('index'))
-    return render_template('deleteitem.html', item = item)
+    return render_template('deleteitem.html', item=item)
 
-############################# AUTH #####################################
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # TO DO
     """
-    add login page
-    login endpoint should check if there's a user token available
-    Using https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask/page/0#comments
-    implement User model, should be finished by friday
-    Friday - finish auth, implement auth and make sure everything's working
-    add some style to app
-    # Extras! Write tests, if possible for some of the things
-    # Extras! Implement different configs for DEV vs PROD
     """
-    print(session.get('auth_token') is None)
-    print(session.get('auth_token') is not None)
-    print(session.get('auth_token'))
-    if not current_user.is_anonymous:
+    if current_user.is_authenticated:
         flash('You are logged in already.')
         return redirect(url_for('index'))
 
@@ -161,7 +151,6 @@ def callback(provider):
     except Exception as e:
         print(e)
         return make_response(jsonify(error=e), 401)
-    #login_user(user, True)
     user = User.query.filter_by(unique_id=stuff['id']).first()
     if not user:
         user = User(unique_id=stuff['id'],
@@ -175,8 +164,8 @@ def callback(provider):
     return redirect(url_for('index'))
 
 
-@app.route('/logout/<provider>')
-def logout(provider):
+@app.route('/logout')
+def logout():
     token = session.get('auth_token')
     if token is None:
         response = make_response(jsonify(status='User not connected'), 401)

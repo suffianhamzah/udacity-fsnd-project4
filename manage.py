@@ -6,7 +6,7 @@ from catalog import app, db, Item, Category, User
 
 def make_shell_context():
     """Creates an instance where manager knows which app to load in CLI"""
-    return dict(app=app, db=db, Item=Item, Category=Category)
+    return dict(app=app, db=db, Item=Item, Category=Category, User=User)
 
 
 """Initializes all the objects for commands"""
@@ -20,12 +20,13 @@ def createdb():
     db.create_all()
     """ Creates some objects in the db
     """
+    admin = User(unique_id='over123', name='Suf', email='suffian@gmail.com')
     Soccer = Category(name='Soccer')
     Baseball = Category(name='Baseball')
     boot = Item(name='Boots', description='Boots worn during playing',
-                category=Soccer)
-    bat = Item(name='Bat', description='Test', category=Baseball)
-    ball= Item(name='Soccer Ball', description='Testa', category=Soccer)
+                category=Soccer, user=admin)
+    bat = Item(name='Bat', description='Test', category=Baseball, user=admin)
+    ball= Item(name='Soccer Ball', description='Testa', category=Soccer, user=admin)
     db.session.add(Soccer)
     db.session.add(Baseball)
     db.session.add(boot)
