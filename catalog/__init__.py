@@ -30,8 +30,9 @@ def load_user(user_id):
 @app.route('/')
 def index():
     items = Item.query.all()
+    categories = Category.query.all()
     print([item.name for item in items])
-    return render_template('index.html', items=items)
+    return render_template('index.html', items=items, categories=categories)
 
 
 @app.route('/categories')
@@ -40,7 +41,7 @@ def show_categories():
     return render_template('categories.html', categories=categories)
 
 
-@app.route('/categories/<int:category_id>')
+@app.route('/categories/<int:category_id>/items')
 def show_category(category_id):
     category = Category.query.get(category_id)
     return render_template('category.html', category=category)

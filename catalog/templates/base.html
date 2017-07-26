@@ -5,8 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- My own css -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
 
     {% block head %}
     <title>{% block title %}{% endblock %} - Patalog</title>
@@ -14,33 +20,16 @@
 </head>
 <body>
     <!-- Navbar help from -->
-    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-        <a class="navbar-brand" href="{{url_for('index')}}">Catalog App</a>
-        <ul class="navbar-nav ml-auto">
-        {% if current_user.is_authenticated %}
-        <li class="nav-item navbar-text">
-            <p>Hi {{ current_user.name }}!</p>
-        </li>
-        <li>
-            <a class="btn btn-default nav-item" href="{{url_for('logout')}}">Logout</a> |
-        </li>
-        {% else %}
-        <li>
-            <a class="btn btn-default nav-item" href="{{url_for('login')}}">Login</a>
-        </li>
-        {% endif %}
-        </ul>
-    </nav>
 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" href="#">Catalog app</a>
-        <div id="navbarNavDropdown" class="navbar-collapse collapse">
-            <ul class="navbar-nav ml-auto">
+        <div id="navbarNavDropdown" class="navbar-collapse collapse justify-content-end">
+                    <ul class="navbar-nav ">
                 {% if current_user.is_authenticated %}
-                <li class="nav-item navbar-text">
-                    Hi {{ current_user.name }}
+                <li class="nav-item">
+                    <p class='login'>Hi {{ current_user.name }}!</p>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
@@ -51,6 +40,9 @@
                 </li>
                 {% endif %}
             </ul>
+
+
+        </div>
         </div>
     </nav>
     {% with messages = get_flashed_messages() %}
@@ -62,13 +54,14 @@
         </ul>
     {% endif %}
     {% endwith %}
-    <div id="content">{% block content %}{% endblock %}</div>
-    <div id="footer">
+    <div id="content" class="container mt-5 mx-auto content-box">{% block content %}{% endblock %}</div>
+    <footer class="navbar navbar-light bg-faded">
+        <div class="container">
         {% block footer %}
         &copy; Copyright 2017 by Suffian Hamzah
         {% endblock %}
-    </div>
-
+        </div>
+    </footer>
     <!-- jQuery first, then Tether, then Bootstrap JS. -->
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
