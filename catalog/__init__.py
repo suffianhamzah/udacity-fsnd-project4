@@ -44,7 +44,10 @@ def show_categories():
 @app.route('/categories/<int:category_id>/items')
 def show_category(category_id):
     category = Category.query.get(category_id)
-    return render_template('category.html', category=category)
+    categories = Category.query.all()
+    return render_template('category.html',
+                           selected_category=category,
+                           categories=categories)
 
 
 @app.route('/item/<int:item_id>')

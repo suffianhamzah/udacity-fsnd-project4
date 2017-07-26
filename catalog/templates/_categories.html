@@ -2,7 +2,7 @@
     {% if categories %}
     <ul class="list-group">
         {% for category in categories %}
-        <a class="list-group-item list-group-item-action" href="{{ url_for('show_category', category_id=category.id) }}">{{ category.name }}</a>
+        <a class="list-group-item list-group-item-action {% if selected_category and selected_category.id == category.id %} active {% endif %}" href="{{ url_for('show_category', category_id=category.id) }}">{{ category.name }}</a>
         {% endfor %}
     </ul>
     {% else %}

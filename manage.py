@@ -43,7 +43,7 @@ def destroydb():
     print('dropped db tables')
 
 
-manager.add_command('shell', server)
+manager.add_command('shell', shell)
 manager.add_command('runserver', server)
 
 

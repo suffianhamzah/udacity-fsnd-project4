@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
-{% block content %}
-<h2>All items {{ category.name }}</h2>
-{% if category.items %}
-{% for item in category.items %}
-<ul>
+{% extends 'category_layout.html'%}
+{% block page_content %}
+<h2>All items {{ selected_category.name }}</h2>
+{% if selected_category.items %}
+{% for item in selected_category.items %}
+<ul class="list-unstyled">
     <li>{{ item.name }}</li>
 </ul>
 {% endfor %}
