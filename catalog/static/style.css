@@ -1,6 +1,8 @@
-html, body {
-    background: grey;
+body {
+  font-family: "Helvetica", "Arial", sans-serif;
+  line-height: 1.5;
 }
+
 .login {
     display: block;
     padding-top: 0.5em;
@@ -8,4 +10,35 @@ html, body {
 
 .content-box {
     background-color: white;
+}
+
+.sidebar {
+
+}
+
+.remove-border:first-child {
+    border-top-right-radius: 0;
+    border-radius: 0px 0px 0px 0px;
+}
+
+html {
+  font-size: 14px;
+}
+
+@include media-breakpoint-up(sm) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  html {
+    font-size: 20px;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  html {
+    font-size: 28px;
+  }
 }

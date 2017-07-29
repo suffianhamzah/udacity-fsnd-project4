@@ -1,18 +1,21 @@
 {% extends 'category_layout.html'%}
 
 {% block page_content %}
-<p><a href='{{ url_for("new_item") }}'>Add item</a></p>
-<p> Latest items </p>
-<div>
-{% if items %}
-<ul>
-{% for item in items: %}
-    <li>
-        <p> {{ item.category.name }}, <a href='{{ url_for("show_item", item_id=item.id)}}'>{{ item.name }}</a></p>
-    </li>
-{% endfor %}
-</ul>
-{% else %}
-<h3>Oops! Nampakngit ya tiada panduan lagi dialam laman web kami! Sila layari balik pada masa hadapan!</h3>
-{% endif %}
+<div class="card">
+  <div class="card-block">
+    <h4 class="card-title">Latest Items</h4>
+    <h6 class="card-link mt-4 mb-4 text-muted"><a href='{{ url_for("new_item") }}'>Add item</a></h6>
+    {% if items %}
+    <ul  class="list-unstyled">
+        {% for item in items: %}
+        <li>
+            <p><a href="{{ url_for('show_item', item_id=item.id)}}">{{ item.name }}</a>, <a href="{{ url_for('show_category', category_id=item.category.id) }}"><em>{{ item.category.name }}</em></a></p>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <h3>Oops! Nampakngit ya tiada panduan lagi dialam laman web kami! Sila layari balik pada masa hadapan!</h3>
+    {% endif %}
+  </div>
+</div>
 {% endblock%}

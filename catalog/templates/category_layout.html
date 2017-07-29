@@ -1,13 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="row p-5">
-    <div class="col-sm-4">
-        <h2>Categories</h2>
-        {% include '_categories.html' %}
+<div class="row">
+    <div class="col-12 col-md-3">
+        <div class="card">
+          <h4 class="card-header">Categories</h4>
+          {% if categories %}
+          <ul class="list-group remove-border">
+            {% for category in categories %}
+            <a class="list-group-item list-group-item-action {% if selected_category and selected_category.id == category.id %} active {% endif %}" href="{{ url_for('show_category', category_id=category.id) }}">{{ category.name }}</a>
+            {% endfor %}
+            </ul>
+            {% else %}
+            <p>We need categories to be created!</p>
+            {% endif %}
+        </div>
     </div>
-    <div class="col-sm-8">
-        {% block page_content %}
-        {% endblock %}
+    <div class="col-12 col-md-8">
+    {% block page_content %}
+    {% endblock %}
     </div>
 </div>
 {% endblock %}
