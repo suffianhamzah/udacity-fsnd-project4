@@ -1,7 +1,5 @@
 {% extends 'category_layout.html'%}
 {% block page_content %}
-<div class="card">
-  <div class="card-block">
     <h4 class="card-title">{{ selected_category.name }}</h4>
     {% if selected_category.items %}
     {% for item in selected_category.items %}
@@ -14,6 +12,4 @@
     <p>Would you like to create one?</p>
     {% endif %}
     <a href='{{url_for("new_item")}}'><button type="button" class="btn btn-primary">Add item</button></a>
-</div>
-</div>
 {% endblock%}

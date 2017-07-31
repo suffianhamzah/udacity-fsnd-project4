@@ -78,6 +78,7 @@ def new_item():
 
 
 @app.route('/item/edit/<int:item_id>', methods=['GET', 'POST'])
+@login_required
 def edit_item(item_id):
     """Edits an existing item's fields
 
@@ -85,10 +86,17 @@ def edit_item(item_id):
 
     """
     item = Item.query.get_or_404(item_id)
+
     form = itemForm(obj=item)  # Prepulate form
     category_choices = [(category.id, category.name)
                         for category in Category.query.all()]
     form.category.choices = category_choices
+
+    id_check = current_user.id is not item.user.id
+
+    if id_check:
+        flash('You are not allowed to edit items that do not belong to you')
+        return redirect(url_for('show_item', item_id=item.id))
 
     if form.validate_on_submit():
         item.name = form.name.data
@@ -107,8 +115,16 @@ def edit_item(item_id):
 
 
 @app.route('/item/delete/<int:item_id>', methods=['GET', 'POST'])
+@login_required
 def delete_item(item_id):
     item = Item.query.get_or_404(item_id)
+
+    id_check = current_user.id is not item.user.id
+
+    if id_check:
+        flash('You are not allowed to delete items that do not belong to you')
+        return redirect(url_for('show_item', item_id=item.id))
+
     if request.method == 'POST':
         db.session.delete(item)
         db.session.commit()
@@ -172,8 +188,8 @@ def callback(provider):
 def logout():
     token = session.get('auth_token')
     if token is None:
-        response = make_response(jsonify(status='User not connected'), 401)
-        return response
+        flash('You are not connected')
+        return redirect(url_for('index'))
     del session['auth_token']
     logout_user()
     flash('Successfully logged out')

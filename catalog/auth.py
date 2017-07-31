@@ -1,15 +1,5 @@
-"""
-Implementation of Oauth Class ()
-Heavily inspired by https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask
-Using Requests oauth
-"""
-
-import json
-import requests
-
-from flask import current_app, session, url_for, request, make_response
+from flask import current_app, session, url_for, request
 from requests_oauthlib import OAuth2Session
-
 
 
 class OauthSignIn(object):
@@ -23,6 +13,7 @@ class OauthSignIn(object):
 
     """
     providers = None
+
     def __init__(self, provider_name):
         self.provider_name = provider_name
         credentials = current_app.config['OAUTH_CREDENTIALS'][provider_name]
@@ -44,8 +35,8 @@ class OauthSignIn(object):
     def get_provider(self, provider_name):
         """Class method to fetch a child sign-in class e.g. Google
 
-        Instatiates all child classes, stores them into a dict(porviders) and returns
-        a child instance based on provider_name
+        Instatiates all child classes, stores them into a dict(porviders)
+        and returns a child instance based on provider_name
 
         Params:
             provider_name (str): Name of Oauth provider

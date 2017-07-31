@@ -1,10 +1,7 @@
 {% extends 'category_layout.html'%}
 
 {% block page_content %}
-<div class="card">
-  <div class="card-block">
     <h4 class="card-title">Latest Items</h4>
-    <h6 class="card-link mt-4 mb-4 text-muted"><a href='{{ url_for("new_item") }}'>Add item</a></h6>
     {% if items %}
     <ul  class="list-unstyled">
         {% for item in items: %}
@@ -16,6 +13,5 @@
     {% else %}
     <h3>Oops! Nampakngit ya tiada panduan lagi dialam laman web kami! Sila layari balik pada masa hadapan!</h3>
     {% endif %}
-  </div>
-</div>
+    <a href='{{url_for("new_item")}}'><button type="button" class="btn btn-primary">Add item</button></a>
 {% endblock%}
