@@ -1,12 +1,15 @@
-from flask import (Flask, render_template, url_for, request,
+from flask import (Flask, render_template, url_for,
                    flash, redirect, session, request, make_response)
-from flask_login import LoginManager, login_user, logout_user, current_user, login_required
+from flask_login import (LoginManager, login_user, logout_user,
+                         current_user, login_required)
 from flask.json import jsonify
+
+# Relative imports
 from .forms import itemForm
 from .models import db, Item, Category, User
 from .config import config
 from .auth import OauthSignIn
-# base_dir = os.path.abspath()
+
 app = Flask(__name__)
 
 # app configuration
@@ -24,11 +27,13 @@ login_manager.login_view = 'login'
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Sets current_user object"""
     return User.query.get(int(user_id))
 
 
 @app.route('/')
 def index():
+    """Main view for the app"""
     items = Item.query.all()
     categories = Category.query.all()
     print([item.name for item in items])
@@ -37,12 +42,14 @@ def index():
 
 @app.route('/categories')
 def show_categories():
+    """View for showing all categories"""
     categories = Category.query.all()
     return render_template('categories.html', categories=categories)
 
 
 @app.route('/categories/<int:category_id>/items')
 def show_category(category_id):
+    """View for showing all items of one category"""
     category = Category.query.get(category_id)
     categories = Category.query.all()
     return render_template('category.html',
@@ -52,6 +59,7 @@ def show_category(category_id):
 
 @app.route('/item/<int:item_id>')
 def show_item(item_id):
+    """View for showing an item's details"""
     item = Item.query.filter_by(id=item_id).first_or_404()
     return render_template('item.html', item=item)
 
@@ -59,6 +67,7 @@ def show_item(item_id):
 @app.route('/item/new', methods=['GET', 'POST'])
 @login_required
 def new_item():
+    """View for creating a new item"""
     form = itemForm()
     category_choices = [(category.id, category.name)
                         for category in Category.query.all()]
@@ -117,6 +126,7 @@ def edit_item(item_id):
 @app.route('/item/delete/<int:item_id>', methods=['GET', 'POST'])
 @login_required
 def delete_item(item_id):
+    """View for deleting an item"""
     item = Item.query.get_or_404(item_id)
 
     id_check = current_user.id is not item.user.id
@@ -135,7 +145,8 @@ def delete_item(item_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """
+    """Shows the login page to an unathenticated user,
+    redirects otherwise.
     """
     if current_user.is_authenticated:
         flash('You are logged in already.')
@@ -167,16 +178,16 @@ def callback(provider):
     oauth = OauthSignIn.get_provider(provider)
     print(oauth)
     try:
-        stuff = oauth.callback()
+        data = oauth.callback()
     except Exception as e:
         print(e)
         return make_response(jsonify(error=e), 401)
-    user = User.query.filter_by(unique_id=stuff['id']).first()
+    user = User.query.filter_by(unique_id=data['id']).first()
     if not user:
-        user = User(unique_id=stuff['id'],
-                    name=stuff['name'],
-                    email=stuff['email'],
-                    picture=stuff['picture'])
+        user = User(unique_id=data['id'],
+                    name=data['name'],
+                    email=data['email'],
+                    picture=data['picture'])
         db.session.add(user)
         db.session.commit()
     login_user(user, True)

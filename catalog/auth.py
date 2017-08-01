@@ -89,7 +89,6 @@ class GoogleSignIn(OauthSignIn):
         userinfo = resp.json()
         print(userinfo)
         return userinfo
-        #return 'google$' + resp_dict['id'], resp_dict['name'] , resp_dict['email']
 
 
 #class FacebookSignIn(OauthSignIn):

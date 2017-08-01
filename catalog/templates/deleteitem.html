@@ -1,7 +1,7 @@
-{% extends 'base.html'%}
-{% block content %}
+{% extends 'item_layout.html'%}
+{% block page_content %}
 <form method='POST' action='{{url_for("delete_item", item_id = item.id)}}'>
     <p>Are you sure you want to delete {{ item.name }}?
-    <input type='submit' value='Yes'>
+    <button type='submit' class="btn btn-primary" value='Yes'>Yes</button>
 </form>
 {% endblock%}

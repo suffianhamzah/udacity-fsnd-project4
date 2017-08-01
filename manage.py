@@ -20,7 +20,7 @@ def createdb():
     db.create_all()
     """ Creates some objects in the db
     """
-    admin = User(unique_id='over123', name='Suf', email='suffian@gmail.com')
+    admin = User(unique_id='over123', name='Suf', email='suffian@gmail.com', picture='http://i.pravatar.cc/150')
     Soccer = Category(name='Soccer')
     Baseball = Category(name='Baseball')
     boot = Item(name='Boots', description='Boots worn during playing',
