@@ -1,6 +1,6 @@
 {% extends 'item_layout.html'%}
 {% block page_content %}
-<div class="col-12 col-sm-12 col-md-8 mx-auto">
+<div class="col-12 col-md-6 mx-auto">
     <form method='POST' action='{{url_for("new_item")}}'>
         {{ form.csrf_token }}
         <div class="form-group row {% if form.name.errors %}has-danger{% endif %}">

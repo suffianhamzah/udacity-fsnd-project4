@@ -3,13 +3,18 @@
 <div class="row">
     <div class="col-12 col-md-3">
         <div class="card">
-            <h4 class="card-header">Categories</h4>
+        <div class="card-block">
+            <h4 class="card-title">Categories</h4>
             {% if categories %}
             <!-- For viewports < 768px -->
             <div class="dropdown hidden-md-up">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Categories
-  </button>
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {% if selected_category %}
+                    {{ selected_category.name }}
+                    {% else %}
+                    Latest
+                    {% endif %}
+                    </button>
                 <div class="dropdown-menu" aria-labelledby="dLabel">
                     {% for category in categories %}
                     <a class="dropdown-item" href="{{ url_for('show_category', category_id=category.id) }}">{{ category.name }}</a>
@@ -28,8 +33,9 @@
             {% endif %}
         </div>
     </div>
+    </div>
     <div class="col-12 col-md-9">
-        <div class="card">
+        <div class="card add-gap">
             <div class="card-block">
                 {% block page_content %}
                 {% endblock %}

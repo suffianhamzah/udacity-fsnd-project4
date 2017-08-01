@@ -1,6 +1,11 @@
 {% extends 'item_layout.html' %}
 {% block page_content %}
-<div class='mx-auto' style="width: 200px;">
-<a href='{{ url_for("authorize", provider="google")}}' class="mx-auto">Login with google</a>
+<div class="row">
+<div class='col-12 col-md-6 mx-auto'>
+<a href='{{ url_for("authorize", provider="google")}}' class="btn btn-primary btn-lg btn-block">
+    <span class="fa fa-google"></span> Sign in with Google
+  </a>
+</div>
+
 </div>
 {% endblock %}
