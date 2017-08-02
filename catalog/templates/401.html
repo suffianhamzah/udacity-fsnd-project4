@@ -1,9 +1,9 @@
 {# Content taken from http://sonic.net/errors/text.shtml #}
 {% extends 'item_layout.html %}
 {% block title %}401 Error - Authentication Failed{% endblock %}
-{% block page_content%}
+{% block page_content %}
 <h1>401 - Authentication Failed</h1>
-    <p>The URL you've requested, <b>{{ session.get('next') }}</b>
+    <p>The URL you've requested, <b>{{ session['next'] }}</b>
     requires a correct username and password. Either you entered
     an incorrect username/password, or your browser doesn't support
     this feature.</p>

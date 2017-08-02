@@ -53,8 +53,8 @@ class OauthSignIn(object):
 
 class GoogleSignIn(OauthSignIn):
     """Google oauth class inherited from oauthsignin
-    Implements
-
+    Implements the authorize and callback methods based on Google's
+    specifications for oauth
     """
 
     def __init__(self):
@@ -80,23 +80,16 @@ class GoogleSignIn(OauthSignIn):
         return authorization_url
 
     def callback(self):
-        """Retrieves access token from provider
-
-
+        """Retrieves access token from provider, and returns user data
+        from the user's google account
         """
         access_token = (self.auth_session.fetch_token(
                         self.token_url,
                         client_secret=self.client_secret,
                         authorization_response=request.url))
         session['auth_token'] = access_token
-
-        # fetches the info
-        resp = self.auth_session.get('https://www.googleapis.com/oauth2/v1/userinfo')
+        info_url = 'https://www.googleapis.com/oauth2/v1/userinfo'
+        resp = self.auth_session.get(info_url)
         userinfo = resp.json()
         print(userinfo)
         return userinfo
-
-
-#class FacebookSignIn(OauthSignIn):
- #   def __init__(self):
- #       super().__init__('facebook')

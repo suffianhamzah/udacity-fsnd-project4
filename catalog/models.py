@@ -27,6 +27,13 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'name': self.name,
+                'id': self.id,
+                'items': [item.serialize for item in self.items]}
+
     def __repr__(self):
         return '<Category {0}>'.format(self.name)
 
@@ -45,6 +52,14 @@ class Item(db.Model):
     category = db.relationship('Category', backref='items')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User')
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {'cat_id': self.category_id,
+                'title': self.name,
+                'id': self.id,
+                'description': self.description}
 
     def __repr__(self):
         return ('<Item {0}, category {1}, created by user {2}>'

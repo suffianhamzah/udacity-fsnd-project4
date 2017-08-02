@@ -1,5 +1,6 @@
 from flask import (Flask, render_template, url_for, abort, flash, redirect,
                    session, request)
+from flask.json import jsonify
 from flask_login import (LoginManager, login_user, logout_user,
                          current_user, login_required)
 
@@ -209,7 +210,9 @@ def callback(provider):
         db.session.commit()
     login_user(user, True)
     flash('You Are logged in')
-    return redirect(session['next']) or redirect(url_for('index'))
+    if session.get('next'):
+        return redirect(session['next'])
+    return redirect(url_for('index'))
 
 
 @app.route('/logout')
@@ -223,6 +226,14 @@ def logout():
     logout_user()
     flash('Successfully logged out')
     return redirect(url_for('index'))
+
+
+@app.route('/catalog/JSON')
+@login_required
+def get_json():
+    """Provides a JSON object of all items in the catalog"""
+    categories = Category.query.all()
+    return jsonify(categories=[category.serialize for category in categories])
 
 
 if __name__ == '__main__':
