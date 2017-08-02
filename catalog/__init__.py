@@ -1,8 +1,8 @@
-from flask import (Flask, render_template, url_for,
-                   flash, redirect, session, request, make_response)
+from flask import (Flask, render_template, url_for, abort, flash, redirect,
+                   session, request)
 from flask_login import (LoginManager, login_user, logout_user,
                          current_user, login_required)
-from flask.json import jsonify
+
 
 # Relative imports
 from .forms import itemForm
@@ -31,6 +31,24 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    """Custom 404 error handling"""
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(403)
+def forbidden_access(e):
+    """Custom 403 error handling"""
+    return render_template('403.html'), 403
+
+
+@app.errorhandler(401)
+def authentication_failed(e):
+    """Custom 401 error handling"""
+    return render_template('401.html'), 401
+
+
 @app.route('/')
 def index():
     """Main view for the app"""
@@ -38,13 +56,6 @@ def index():
     categories = Category.query.all()
     print([item.name for item in items])
     return render_template('index.html', items=items, categories=categories)
-
-
-@app.route('/categories')
-def show_categories():
-    """View for showing all categories"""
-    categories = Category.query.all()
-    return render_template('categories.html', categories=categories)
 
 
 @app.route('/categories/<int:category_id>/items')
@@ -89,11 +100,7 @@ def new_item():
 @app.route('/item/edit/<int:item_id>', methods=['GET', 'POST'])
 @login_required
 def edit_item(item_id):
-    """Edits an existing item's fields
-
-    With reference from: https://goonan.io/flask-wtf-tricks/
-
-    """
+    """Edits an existing item's information"""
     item = Item.query.get_or_404(item_id)
 
     form = itemForm(obj=item)  # Prepulate form
@@ -104,8 +111,7 @@ def edit_item(item_id):
     id_check = current_user.id is not item.user.id
 
     if id_check:
-        flash('You are not allowed to edit items that do not belong to you')
-        return redirect(url_for('show_item', item_id=item.id))
+        abort(403)
 
     if form.validate_on_submit():
         item.name = form.name.data
@@ -132,8 +138,7 @@ def delete_item(item_id):
     id_check = current_user.id is not item.user.id
 
     if id_check:
-        flash('You are not allowed to delete items that do not belong to you')
-        return redirect(url_for('show_item', item_id=item.id))
+        abort(403)
 
     if request.method == 'POST':
         db.session.delete(item)
@@ -143,15 +148,22 @@ def delete_item(item_id):
     return render_template('deleteitem.html', item=item)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login')
 def login():
-    """Shows the login page to an unathenticated user,
+    """
+    Shows the login page to an unathenticated user,
     redirects otherwise.
+
+    We store the redirect url(next) in a session so that
+    we can retrieve the url once a user successfully logs in
+    through their respective oauth provider
     """
     if current_user.is_authenticated:
         flash('You are logged in already.')
         return redirect(url_for('index'))
 
+    session['next'] = request.args.get('next')
+    print(session['next'])
     return render_template('login.html')
 
 
@@ -165,23 +177,28 @@ def authorize(provider):
 
 @app.route('/callback/<provider>')
 def callback(provider):
+    """The route that an oauth provider would call once the user
+    has or has not granted authentication to our website
+
+    """
     print(request.args)
     if 'error' in request.args:
-        return request.args.get('error')
-    print('test1')
+        flash(request.args.get('error'))
+        abort(401)
 
     no_code = 'code' not in request.args
     not_state = request.args.get('state') != session.get('oauth_state')
+
     if no_code and not_state:
-        return 'Invalid State and no auth code!'
-    print(provider)
+        flash('Invalid state and no auth code!')
+        abort(401)
     oauth = OauthSignIn.get_provider(provider)
-    print(oauth)
+
     try:
         data = oauth.callback()
     except Exception as e:
-        print(e)
-        return make_response(jsonify(error=e), 401)
+        abort(401)
+
     user = User.query.filter_by(unique_id=data['id']).first()
     if not user:
         user = User(unique_id=data['id'],
@@ -192,11 +209,12 @@ def callback(provider):
         db.session.commit()
     login_user(user, True)
     flash('You Are logged in')
-    return redirect(url_for('index'))
+    return redirect(session['next']) or redirect(url_for('index'))
 
 
 @app.route('/logout')
 def logout():
+    """Logging out from the website"""
     token = session.get('auth_token')
     if token is None:
         flash('You are not connected')

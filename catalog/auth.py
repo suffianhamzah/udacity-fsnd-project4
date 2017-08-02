@@ -5,7 +5,8 @@ from requests_oauthlib import OAuth2Session
 class OauthSignIn(object):
     """A base Oauth sign in class
     A base class for an oauth2session for different oauth providers
-    Based on https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask
+    Based on
+    https://blog.miguelgrinberg.com/post/oauth-authentication-with-flask
     Instead of using Rauth, this is implemented using requests-oauthlib
     https://requests-oauthlib.readthedocs.io
 
@@ -15,13 +16,13 @@ class OauthSignIn(object):
     providers = None
 
     def __init__(self, provider_name):
+        """Initializes the class"""
         self.provider_name = provider_name
         credentials = current_app.config['OAUTH_CREDENTIALS'][provider_name]
         self.client_id = credentials['id']
         self.client_secret = credentials['secret']
 
     def authorize(self):
-        """This function will call"""
         pass
 
     def callback(self):
@@ -35,7 +36,7 @@ class OauthSignIn(object):
     def get_provider(self, provider_name):
         """Class method to fetch a child sign-in class e.g. Google
 
-        Instatiates all child classes, stores them into a dict(porviders)
+        Instatiates all child classes, stores them into a dict(providers)
         and returns a child instance based on provider_name
 
         Params:
@@ -51,6 +52,11 @@ class OauthSignIn(object):
 
 
 class GoogleSignIn(OauthSignIn):
+    """Google oauth class inherited from oauthsignin
+    Implements
+
+    """
+
     def __init__(self):
         """Init and overriding the provider_name using super"""
         super().__init__('google')
