@@ -1,10 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-# Instead of Base, use db.Model
-
-# TODO Plan my app first, i have to make a CRUD APP
-
-# flask-sqlalchemy would set auto_increment to true (WOW!)
 
 # dbpattern initialization from https://stackoverflow.com/questions/
 # 9692962/flask-sqlalchemy-import-context-issue/9695045#9695045
@@ -12,6 +7,7 @@ db = SQLAlchemy()
 
 
 class User(UserMixin, db.Model):
+    """User data model"""
     __tablename_ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -25,6 +21,7 @@ class User(UserMixin, db.Model):
 
 
 class Category(db.Model):
+    """Category data model"""
     __tablename__ = 'category'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -35,6 +32,7 @@ class Category(db.Model):
 
 
 class Item(db.Model):
+    """Item data model"""
     __tablename__ = 'item'
 
     id = db.Column(db.Integer, primary_key=True)

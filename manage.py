@@ -18,15 +18,16 @@ server = Server(host="0.0.0.0", port=9000)
 @manager.command
 def createdb():
     db.create_all()
-    """ Creates some objects in the db
-    """
-    admin = User(unique_id='over123', name='Suf', email='suffian@gmail.com', picture='http://i.pravatar.cc/150')
+    """ Creates some objects in the db"""
+    admin = User(unique_id='over123', name='Suf', email='suffian@gmail.com',
+                 picture='http://i.pravatar.cc/150')
     Soccer = Category(name='Soccer')
     Baseball = Category(name='Baseball')
     boot = Item(name='Boots', description='Boots worn during playing',
                 category=Soccer, user=admin)
     bat = Item(name='Bat', description='Test', category=Baseball, user=admin)
-    ball= Item(name='Soccer Ball', description='Testa', category=Soccer, user=admin)
+    ball = Item(name='Soccer Ball', description='Testa',
+                category=Soccer, user=admin)
     db.session.add(Soccer)
     db.session.add(Baseball)
     db.session.add(boot)
