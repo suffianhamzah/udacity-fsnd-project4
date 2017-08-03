@@ -28,7 +28,7 @@ If not:
 This web app uses Google as a third-party provider for oauth authentication and authorization. You will need to set up a Google API key in the environment variable.
 
 You can obtain the API from [Google Developer website](https://developers.google.com/)
-Then, you would need to set an evironment variable, 'GOOGLE_API'.
+Then, you would need to set an evironment variable, ```'GOOGLE_API'```.
 
 #### Getting the data for the database:
 ```
