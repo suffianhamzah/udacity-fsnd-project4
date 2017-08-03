@@ -91,5 +91,4 @@ class GoogleSignIn(OauthSignIn):
         info_url = 'https://www.googleapis.com/oauth2/v1/userinfo'
         resp = self.auth_session.get(info_url)
         userinfo = resp.json()
-        print(userinfo)
         return userinfo

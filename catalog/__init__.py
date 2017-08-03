@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 # app configuration
 app.config.from_object(config['default'])
-# app.config.from_pyfile('config.py')
+
 
 # db initialization
 db.init_app(app)
