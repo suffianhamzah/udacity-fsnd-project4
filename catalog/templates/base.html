@@ -1,83 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <!-- Bootstrap CSS-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 
-    <!-- Font-Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Font-Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!-- My own css -->
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+  <!-- My own css -->
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
 
-    {% block head %}
-    <title>{% block title %}{% endblock %} - Patalog</title>
-    {% endblock%}
+  {% block head %}
+  <title>{% block title %}{% endblock %} - Patalog</title>
+  {% endblock%}
 </head>
 <body>
-    <!-- Navbar help from -->
-    <div id="navigation">
-        <nav class="navbar navbar-toggleable-md navbar-inverse bg-primary">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="{{ url_for('index') }}">Catalog app</a>
-            <div id="navbarNavDropdown" class="navbar-collapse collapse justify-content-end">
-                <ul class="navbar-nav ">
-                    {% if current_user.is_authenticated %}
-                    <li class="nav-item">
-                        <div class="media">
-                        <img class="d-flex align-self-center mr-3 rounded-circle" src="{{current_user.picture}}" alt="{{ current_user.name }}'s picture" width="30" height="30">
-                          <div class="media-body">
-                            <p class="mt-0 mb-0 login text-white">Hi {{ current_user.name }}!</p>
-                        </div>
-                    </div>
+  <!-- Navbar help from -->
+  <div id="navigation">
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-primary">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="{{ url_for('index') }}">Catalog app</a>
+      <div id="navbarNavDropdown" class="navbar-collapse collapse justify-content-end">
+        <ul class="navbar-nav ">
+          {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <div class="media">
+              <img class="d-flex align-self-center mr-3 rounded-circle" src="{{current_user.picture}}" alt="{{ current_user.name }}'s picture" width="30" height="30">
+              <div class="media-body">
+                <p class="mt-0 mb-0 login text-white">Hi {{ current_user.name }}!</p>
+              </div>
+            </div>
 
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
     </nav>
-</div>
-<div id="flash_messages" class="container mt-3 mb-3">
+  </div>
+  <div id="flash_messages" class="container mt-3 mb-3">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     {% for message in messages %}
     <div id="alert_message" class="alert alert-info alert-dismissible fade show" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      {{ message }}
     </div>
     {% endfor %}
     {% endif %}
     {% endwith %}
-</div>
-<div id="content" class="container">
+  </div>
+  <div id="content" class="container">
     {% block content %}
     {% endblock %}
-</div>
-<footer class="navbar navbar-light fixed-bottom bg-faded mt-5">
+  </div>
+  <footer class="navbar navbar-light fixed-bottom bg-faded mt-5">
     {% block footer %}
     &copy; Copyright 2017 by Suffian Hamzah
     {% endblock %}
-</footer>
+  </footer>
 
-<!-- jQuery first, then Tether, then Bootstrap JS. -->
-<script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  <!-- jQuery first, then Tether, then Bootstrap JS. -->
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
 <!-- function obtained from https://codepen.io/CSWApps/pen/XJoLmN
 <script>

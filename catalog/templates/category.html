@@ -1,15 +1,7 @@
+{%from 'macros.html' import show_items %}
 {% extends 'category_layout.html'%}
+{% block title %}{{ selected_category.name }}{% endblock %}
+{% block category_title %}{{ selected_category.name }}{% endblock %}
 {% block page_content %}
-    <h4 class="card-title">{{ selected_category.name }}</h4>
-    {% if selected_category.items %}
-    {% for item in selected_category.items %}
-    <ul class="list-unstyled">
-        <li><a href="{{ url_for('show_item', item_id=item.id)}}">{{ item.name }}</a></li>
-    </ul>
-    {% endfor %}
-    {% else %}
-    <p>Oh no! Looks like there's no items for this category!</p>
-    <p>Would you like to create one?</p>
-    {% endif %}
-    <a href='{{url_for("new_item")}}'><button type="button" class="btn btn-primary">Add item</button></a>
-{% endblock%}
+{{ show_items(selected_category.items) }}
+{% endblock %}

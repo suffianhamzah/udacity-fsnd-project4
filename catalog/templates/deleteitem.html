@@ -1,7 +1,10 @@
-{% extends 'item_layout.html'%}
+{% extends 'item_layout.html' %}
+{% block title %}Delete Item{% endblock %}
+{% block card_title %}Delete Item{% endblock %}
 {% block page_content %}
-<form method='POST' action='{{url_for("delete_item", item_id = item.id)}}'>
-    <p>Are you sure you want to delete {{ item.name }}?
-    <button type='submit' class="btn btn-primary" value='Yes'>Yes</button>
+<form method="POST" action="{{url_for('delete_item', item_id=item.id)}}">
+    <p>Are you sure you want to delete <strong>{{ item.name }}</strong>?</p>
+    <button type="submit" class="btn btn-primary" value="Yes">Yes</button>
+    <a href="{{ url_for('show_item', item_id=item.id) }}" class="btn btn-secondary" value="Yes">No</a>
 </form>
 {% endblock%}

@@ -1,17 +1,8 @@
+{%from 'macros.html' import show_items %}
 {% extends 'category_layout.html'%}
 {% block title %}Main page{% endblock %}
+{% block category_title %}Latest Items{% endblock %}
 {% block page_content %}
-    <h4 class="card-title">Latest Items</h4>
-    {% if items %}
-    <ul  class="list-unstyled">
-        {% for item in items: %}
-        <li>
-            <p><a href="{{ url_for('show_item', item_id=item.id)}}">{{ item.name }}</a>, <a href="{{ url_for('show_category', category_id=item.category.id) }}"><em>{{ item.category.name }}</em></a></p>
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <h3>Oops! Nampakngit ya tiada panduan lagi dialam laman web kami! Sila layari balik pada masa hadapan!</h3>
-    {% endif %}
-    <a href='{{url_for("new_item")}}'><button type="button" class="btn btn-primary">Add item</button></a>
-{% endblock%}
+{{ show_items(items) }}
+{% endblock %}
+

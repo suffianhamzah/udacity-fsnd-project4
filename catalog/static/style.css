@@ -26,28 +26,9 @@ html {
   font-size: 14px;
 }
 
-@include media-breakpoint-up(sm) {
-  html {
-    font-size: 12px;
-  }
-}
-
-@include media-breakpoint-up(md) {
-  html {
-    font-size: 20px;
-  }
-
-}
-
 @media (max-width: 767px) {
     .add-gap {
     margin-top: 25px;
     }
 }
 
-
-@include media-breakpoint-up(lg) {
-  html {
-    font-size: 28px;
-  }
-}
