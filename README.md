@@ -1,36 +1,41 @@
-Project 4: Log analysis report
+Project 4: Item catalog
 ====================================
-This project is about getting answers to these three questions by querying data from a database. The questions are:
-* What are the most popular three articles of all time?
-* Who are the most popular article authors of all time?
-* On which days did more than 1% of requests lead to errors?
+This project is about building a fully functional application that provides a list of items within a variety of categories as well as provide a user registration and authentication system. Registered users will have the ability to post, edit and delete their own items.
 
 # Installation
 First, either clone or download the project code from this repo:
 
 #### Cloning using SSH or HTTPS
 ```
-$ git clone git@github.com:suffianhamzah/udacity-fsnd-project3.git
+$ git clone git@github.com:suffianhamzah/udacity-fsnd-project4.git
 ```
 
-#### Install PostgreSQL
-Please visit the official [PostgreSQL download page](https://www.postgresql.org/download/) to download and install PostgreSQL
+#### Installing requirements
+In order to run this project, you would need to install a list of modules located in ```requirements.txt```.
 
-#### Installing psycopg2
-This project uses a python module called 'pyscopg2'. You will need to install it as a dependency using `pip`
+If using virtualenv:
 ```
-pip install psycopg2
+  $ pip install -r requirements.txt
 ```
+If not:
+```
+ $ sudo pip install -r requirements.txt  # Caution, this will install modules globally.
+```
+
+# Setting up API keys, and database
+
+#### Setting up Google API
+This web app uses Google as a third-party provider for oauth authentication and authorization. You will need to set up a Google API key in the environment variable.
+
+You can obtain the API from [Google Developer website](https://developers.google.com/)
+Then, you would need to set an evironment variable, 'GOOGLE_API'.
 
 #### Getting the data for the database:
-Please download the data from this [link](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip). It is a .zip file containing the sql file with schemas and the data itself.
+```
+  $ python manage.py createdb
+```
 
-#### Create database from the .sql file
-Once you have downloaded the data, you can load your data into your database.
-Run the command ```psql -d news -f newsdata.sql.```, where:
-* ```psql``` - the PostgreSQL command line tool
-* ```-d news``` = connect the database named news
-* ```-f newsdata.sql``` = source of schema and data population for the news database
 # Usage
 
-To run this project, type: ```python reporting.py```
+To run this project, type: ```python manage.py runserver```
+
