@@ -25,7 +25,7 @@ class DevConfig(Config):
 
 
 class ProdConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgresql://pc-name:user@localhost:PORT/catalog'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://catalog@localhost/catalog'
     DEBUG = False
     OAUTHLIB_INSECURE_TRANSPORT = os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "1"
 
