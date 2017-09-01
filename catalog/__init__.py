@@ -1,3 +1,5 @@
+import os
+
 from flask import (Flask, render_template, url_for, abort, flash, redirect,
                    session, request)
 from flask.json import jsonify
@@ -14,7 +16,7 @@ from .auth import OauthSignIn
 app = Flask(__name__)
 
 # app configuration
-app.config.from_object(config['default'])
+app.config.from_object(config[os.environ.get('SERVER_SETTING')])
 
 
 # db initialization
